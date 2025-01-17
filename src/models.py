@@ -4,6 +4,7 @@ db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250))
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
@@ -15,6 +16,7 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "name": self.name,
             "email": self.email,
         
         }
@@ -24,6 +26,20 @@ class Favorites(db.Model):
     people_id = db.Column(db.Integer, db.ForeignKey("people.id"))
     planet_id = db.Column(db.Integer, db.ForeignKey("planets.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+def serialize(self):
+        query_people = People.query.filter_by(id=self.people_id).first()
+        print(query_people.serialize())
+        query_planets = Planets.query.filter_by(id=self.planets_id).first()
+        print(query_planets.serialize())
+        return {
+
+            "id": self.id,
+            "user_id": self.user_id,
+            "planets_id": query_planets.serialize()["name_planet"],
+            "people_info": query_people.serialize()["name"]
+        }
+
 
     
 class People(db.Model):
@@ -40,10 +56,22 @@ class People(db.Model):
 class Planets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
+    mass = db.Column(db.String(250), nullable=True)
+    climate = db.Column(db.String(250), nullable=True)
+    population = db.Column(db.String(250), nullable=True)
+    diameter = db.Column(db.String(250), nullable=True)
+    gravity = db.Column(db.String(250), nullable=True)
+
+
     favorite_planet = db.relationship('Favorites')
 
     def serialize(self):
         return {
             "id": self.id,
             "name": self.name,
+            "mass": self.mass,
+            "climate": self.climate,
+            "population": self.population,
+            "diameter": self.diameter,
+            "gravity": self.gravity
         }

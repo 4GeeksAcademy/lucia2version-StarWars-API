@@ -28,20 +28,15 @@ class Favorites(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
 def serialize(self):
-        query_people = People.query.filter_by(id=self.people_id).first()
-        print(query_people.serialize())
-        query_planets = Planets.query.filter_by(id=self.planets_id).first()
-        print(query_planets.serialize())
-        return {
-
+       query_people = People.query.filter_by(id=self.people_id).first()
+       query_planets = Planets.query.filter_by(id=self.planet_id).first()
+       return {
             "id": self.id,
             "user_id": self.user_id,
-            "planets_id": query_planets.serialize()["name_planet"],
-            "people_info": query_people.serialize()["name"]
+            "planet_name": query_planets.serialize()["name"] if query_planets else None,
+            "people_name": query_people.serialize()["name"] if query_people else None
         }
 
-
-    
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)

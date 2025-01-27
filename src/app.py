@@ -47,11 +47,9 @@ def get_all_people():
 
 @app.route('/people/<int:people_id>', methods=['GET'])
 def get_each_person(id):
-    people_id = People.query.filter_by(people_id = id)
+    people_id = People.query.filter_by(id=id)
     people = list(map(lambda x: x.serialize(), people_id))
     return jsonify(people_id), 200
-
-
 
 
 @app.route('/planets', methods=['GET'])
@@ -64,7 +62,7 @@ def handle_hello():
 
 @app.route('/planets/<int:planet_id>', methods=['GET'])
 def get_planets(id):
-    planet_id = Planets.query.filter_by(planet_id = id)
+    planet_id = Planets.query.filter_by(id=id)
     planets = list(map(lambda x: x.serialize(), planet_id))
     return jsonify(planet_id), 200
 
